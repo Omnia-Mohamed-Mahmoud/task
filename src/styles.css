@@ -1,0 +1,16 @@
+/* You can add global styles to this file, and also import other style files */
+@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+@import "primeicons/primeicons.css";
+.p-datatable-header{
+  background-color: white!important;
+}
+
+.card{
+  border: none;
+}
+
+.p-datatable .p-datatable-header{
+  border: none!important;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}

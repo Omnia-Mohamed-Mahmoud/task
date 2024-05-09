@@ -1,0 +1,169 @@
+<div class="p-5">
+  <div>
+    <h2>Participant Details</h2>
+  </div>
+  <div class="card">
+    <p-table
+        #dt1
+        [value]="participants"
+        [globalFilterFields]="['Name', 'school']"
+        selectionMode="single"
+        [(selection)]="selectedParticipants"
+        dataKey="id"
+        [tableStyle]="{ 'min-width': '50rem' }"
+        [rows]="5"
+        [first]="first"
+        [showCurrentPageReport]="true"
+        [paginator]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        stateStorage="session"
+        stateKey="statedemo-session">
+        <ng-template pTemplate="caption">
+            <p-iconField iconPosition="left">
+                <p-inputIcon>
+                    <i class="pi pi-search"></i>
+                </p-inputIcon>
+                <input
+                    pInputText
+                    type="text"
+                    [(ngModel)]="globalFilterValue"
+                    (input)="applyGlobalFilter()"
+                    placeholder="Global Search" />
+            </p-iconField>
+
+              <p-button class="ps-4" (click)="showDialog()" icon="pi pi-plus" label="Add New">
+              </p-button>
+                  <p-dialog header="Add New Participant" class="mt-3" [modal]="true" [(visible)]="visible" [style]="{ width: '30rem' , height:'80vh'}">
+                  <div class="d-flex flex-column justify-content-start gap-3 mb-5">
+                    <div class="flex align-items-center gap-3">
+                        <label for="name" class="font-semibold me-2">Name</label>
+                        <input pInputText id="name" [(ngModel)]="newParticipantName" class="flex-auto" autocomplete="off" />
+                    </div>
+                    <div class="flex align-items-center gap-3 ">
+                        <label for="school" class="font-semibold me-2">School</label>
+                        <input pInputText id="school" [(ngModel)]="newPSchool" class="flex-auto" autocomplete="off" />
+                    </div>
+                    <div class="flex align-items-center gap-3 ">
+                      <label for="gender" class="font-semibold me-2">Gender</label>
+                      <p-dropdown
+                              [options]="options"
+                              [checkmark]="true"
+                              [(ngModel)]="SelectGender"
+                              optionLabel="label"
+                              [showClear]="true"
+                              id="gender"
+                              placeholder="Select a Gender" />
+                  </div>
+                  <div class="flex align-items-center gap-3">
+                      <label for="age" class="font-semibold me-2">Age</label>
+                      <p-inputNumber
+                      [(ngModel)]="value"
+                      [min] = "minValue"
+                      [max]="maxValue"
+                      [showButtons]="true"
+                      buttonLayout="horizontal"
+                      inputId="horizontal"
+                      spinnerMode="horizontal"
+                      [step]="1"
+                      decrementButtonClass="p-button-danger"
+                      incrementButtonClass="p-button-success"
+                      incrementButtonIcon="pi pi-plus"
+                      decrementButtonIcon="pi pi-minus"
+                      id="age"/>
+                  </div>
+                    <div class="flex align-items-center gap-3 ">
+                      <label for="progress" class="font-semibold me-2">Peogress</label>
+                      <p-dropdown
+                              [options]="progress"
+                              [checkmark]="true"
+                              [(ngModel)]="progressValue"
+                              optionLabel="label"
+                              [showClear]="true"
+                              id="progress"
+                              placeholder="Select a Progress" />
+                  </div>
+                  </div>
+
+                  <div class="d-flex justify-content-center gap-2 mt-3">
+                      <p-button label="Cancel" severity="danger" (click)="cancel()" />
+                      <p-button label="Save" severity="success" (click)="saveParticipant()" />
+                  </div>
+              </p-dialog>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="id" style="width:10%">
+                    No. <p-sortIcon field="id" />
+                </th>
+                <th pSortableColumn="Name" style="width:20%">
+                    Name <p-sortIcon field="Name" />
+                </th>
+                <th pSortableColumn="school" style="width:20%">
+                  School <p-sortIcon field="school" />
+                </th>
+                <th pSortableColumn="gender" style="width:10%">
+                    Gender <p-sortIcon field="gender" />
+                </th>
+                <th pSortableColumn="age" style="width:10%">
+                    Age <p-sortIcon field="age" />
+                </th>
+                <th pSortableColumn="progress" style="width:15%">
+                  Progress <p-sortIcon field="progress" />
+              </th>
+              <th pSortableColumn="action" style="width:25%">
+                  Action <p-sortIcon field="action" />
+              </th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-participant>
+            <tr [pSelectableRow]="participant">
+                <td>
+                  <span class="p-column-title">id</span>
+                  {{ participant.id+"." }}
+                </td>
+                <td>
+                    <span class="p-column-title">Name</span>
+                    {{ participant.Name }}
+                </td>
+                <td>
+                    <span class="p-column-title">school</span>
+
+                    <span class="ml-1 vertical-align-middle">{{ participant.school }}</span>
+                </td>
+                <td>
+                    <span class="p-column-title">age</span>
+                    <span class="ml-1 vertical-align-middle">{{ participant.age }}</span>
+                </td>
+                <td>
+                    <span class="p-column-title">gender</span>
+                    <span class="ml-1 vertical-align-middle">{{ participant.gender }}</span>
+                </td>
+                <td>
+                    <span class="p-column-title">progress</span>
+                    <p-tag [value]="participant.progress" [severity]="getSeverity(participant.progress)" />
+                </td>
+                <td>
+                    <span>
+                      <a (click)="deleteParticipant(participant.id)">
+                        <i class="pi pi-trash text-danger fs-6 me-3">
+                        </i>
+                      </a>
+                      <a>
+                        <i class="pi pi-pen-to-square text-secondary fs-6">
+                        </i>
+                      </a>
+                    </span>
+                    <!-- <p-tag [value]="participant.progress" [severity]="getSeverity(participant.progress)" /> -->
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="4">No customers found.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+  </div>
+</div>
